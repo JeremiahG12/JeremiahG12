@@ -1,13 +1,17 @@
 import discord
-from config import Token
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+bot = discord.Bot()
+token = os.getenv('TOKEN')
 
-class Client(discord.Client):
-   async def on_ready(self):
-        print(f'logged on as {self.user}!')
+@bot.event
+async def on_ready():
+    print(f"{bot.user} is ready and online!")
 
-intents = discord.Intents.default()
-intents.message_content = True
+@bot.slash_command(name="hello", description="Say hello to the bot")
+async def hello(ctx: discord.ApplicationContext):
+    await ctx.respond("Hey!")
 
-client = Client(intents=intents)
-client.run('MTMxMDc3Njk3MjU3MzU0MDQyMw.GO3xW_.ZfLpcNGq41bLl39RszPINnFnugtCYAdv0sboOw')
+bot.run(token)
